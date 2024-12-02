@@ -11,9 +11,9 @@ export const categories: Category[] = [
   {
     name: "Alimentos",
     icon: "carrot",
-    color: "text-yellow-500",
-    bgColor: "bg-yellow-500",
-    textColor: "text-yellow",
+    color: "text-amber-500",
+    bgColor: "bg-amber-500",
+    textColor: "text-amber-700",
   },
   {
     name: "Vegetais",
