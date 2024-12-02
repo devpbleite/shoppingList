@@ -12,7 +12,7 @@ export function Container({ children, className }: ContainerProps) {
       <div
         className={cn(
           "w-full",
-          "md:bg-white/80 md:backdrop-blur-xl md:rounded-xl md:shadow-lg md:border md:border-violet-100 md:p-6 md:flex mx-auto"
+          "md:bg-white/80 md:backdrop-blur-xl md:rounded-xl md:shadow-lg md:border md:border-violet-100 md:p-6"
         )}
       >
         {children}
