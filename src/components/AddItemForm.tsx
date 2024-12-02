@@ -46,8 +46,16 @@ export function AddItemForm({ onAdd }: AddItemFormProps) {
     },
   });
 
-  const onSubmit = (data: FormData) => {
+  const onSubmit = async (data: FormData) => {
     try {
+      // Validar os dados antes de adicionar
+      if (!data.name || !data.quantity || !data.category) {
+        throw new Error("Todos os campos são obrigatórios");
+      }
+
+      // Prevenir múltiplos submits
+      await new Promise(resolve => setTimeout(resolve, 100));
+      
       onAdd(data);
       form.reset();
       toast({
@@ -55,10 +63,11 @@ export function AddItemForm({ onAdd }: AddItemFormProps) {
         description: `${data.name} foi adicionado à sua lista.`,
       });
     } catch (error) {
+      console.error("Erro ao adicionar item:", error);
       toast({
         variant: "destructive",
         title: "Erro",
-        description: "Não foi possível adicionar o item. Tente novamente.",
+        description: error instanceof Error ? error.message : "Não foi possível adicionar o item. Tente novamente.",
       });
     }
   };
@@ -106,14 +115,20 @@ export function AddItemForm({ onAdd }: AddItemFormProps) {
                 <FormItem>
                   <FormControl>
                     <Input
+                      inputMode="numeric"
+                      pattern="[0-9]*"
                       type="number"
                       min="1"
                       placeholder="Quantidade..."
                       className="bg-white/50 md:bg-white border-red-100 focus:border-red-500"
                       {...field}
                       onChange={(e) => {
-                        const value = e.target.value;
-                        onChange(value === "" ? undefined : Number(value));
+                        try {
+                          const value = e.target.value;
+                          onChange(value === "" ? undefined : Number(value));
+                        } catch (error) {
+                          console.error("Erro ao atualizar quantidade:", error);
+                        }
                       }}
                       value={field.value ?? ""}
                     />
