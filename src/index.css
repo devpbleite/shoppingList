@@ -89,7 +89,6 @@ body {
   }
 }
 
-/* Estilos para o React Select no mobile */
 .select__menu {
   position: fixed !important;
   width: 100% !important;
@@ -106,9 +105,14 @@ body {
 .select__menu-list {
   max-height: 50vh !important;
   padding-bottom: env(safe-area-inset-bottom) !important;
+  scrollbar-width: none !important; 
+  -ms-overflow-style: none !important; 
 }
 
-/* Ajustes para Android */
+.select__menu-list::-webkit-scrollbar {
+  display: none !important; 
+}
+
 @supports (-webkit-appearance: none) {
   .select__control {
     min-height: 40px !important;

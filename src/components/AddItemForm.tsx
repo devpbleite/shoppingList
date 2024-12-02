@@ -62,7 +62,13 @@ export function AddItemForm({ onAdd }: AddItemFormProps) {
       await new Promise(resolve => setTimeout(resolve, 100));
       
       onAdd(data);
-      form.reset();
+      
+      form.resetField("name");
+      form.resetField("quantity");
+      form.resetField("category");
+      
+      form.setValue("category", "");
+      
       toast({
         title: "Item adicionado",
         description: `${data.name} foi adicionado à sua lista.`,
@@ -136,11 +142,12 @@ export function AddItemForm({ onAdd }: AddItemFormProps) {
                 <FormItem>
                   <FormControl>
                     <Select
-                      value={categoryOptions.find(option => option.value === field.value)}
+                      value={categoryOptions.find(option => option.value === field.value) || null}
                       onChange={(newValue) => field.onChange(newValue?.value || "")}
                       options={categoryOptions}
                       placeholder="Categoria"
                       className="bg-white/50 md:bg-white"
+                      isClearable={true}
                       classNames={{
                         control: (state) => 
                           cn(
@@ -151,14 +158,26 @@ export function AddItemForm({ onAdd }: AddItemFormProps) {
                         input: () => "text-sm",
                         option: () => "text-sm",
                       }}
+                      styles={{
+                        menu: (base) => ({
+                          ...base,
+                          maxHeight: 'none', 
+                          overflow: 'hidden', 
+                        }),
+                        menuList: (base) => ({
+                          ...base,
+                          maxHeight: 'none', 
+                          overflow: 'hidden', 
+                        }),
+                      }}
                       theme={(theme) => ({
                         ...theme,
                         colors: {
                           ...theme.colors,
-                          primary: "rgb(239 68 68)", // red-500
-                          primary25: "rgb(254 242 242)", // red-50
-                          primary50: "rgb(254 226 226)", // red-100
-                          primary75: "rgb(252 165 165)", // red-300
+                          primary: "rgb(239 68 68)", 
+                          primary25: "rgb(254 242 242)", 
+                          primary50: "rgb(254 226 226)", 
+                          primary75: "rgb(252 165 165)", 
                         },
                       })}
                     />
@@ -167,6 +186,7 @@ export function AddItemForm({ onAdd }: AddItemFormProps) {
                 </FormItem>
               )}
             />
+
           </div>
         </div>
 
