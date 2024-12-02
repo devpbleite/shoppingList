@@ -1,11 +1,12 @@
-import { useShoppingList } from '@/hooks/useShoppingList';
-import { AddItemForm } from '@/components/AddItemForm';
-import { ShoppingList } from '@/components/ShoppingList';
-import { Header } from '@/components/Header';
-import { Container } from '@/components/Container';
+import { useShoppingList } from "@/hooks/useShoppingList";
+import { AddItemForm } from "@/components/AddItemForm";
+import { ShoppingList } from "@/components/ShoppingList";
+import { Header } from "@/components/Header";
+import { Container } from "@/components/Container";
 
 export default function App() {
-  const { items, addItem, toggleItem, removeItem, updateItem } = useShoppingList();
+  const { items, addItem, toggleItem, removeItem, updateItem } =
+    useShoppingList();
 
   return (
     <div className="min-h-screen w-full bg-gradient-to-b from-blue-50 to-violet-50">
@@ -23,7 +24,9 @@ export default function App() {
             {items.length === 0 && (
               <div className="text-center text-slate-500 py-8">
                 <p className="text-sm">Sua lista está vazia</p>
-                <p className="text-xs mt-1">Adicione alguns itens para começar</p>
+                <p className="text-xs mt-1">
+                  Adicione alguns itens para começar
+                </p>
               </div>
             )}
           </div>

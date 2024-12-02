@@ -39,7 +39,7 @@ export function ShoppingListItem({
         <Checkbox
           checked={item.checked}
           onCheckedChange={() => onToggle(item.id)}
-          className="border-violet-200 data-[state=checked]:bg-violet-500 data-[state=checked]:border-violet-500"
+          className="border-violet-200 data-[state=checked]:bg-red-500 data-[state=checked]:border-red-500"
         />
         <div>
           <p
