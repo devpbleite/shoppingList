@@ -18,25 +18,25 @@ const Select = SelectPrimitive.Root;
 const SelectWithError = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Root>,
   SelectProps
->(({ children, onError, ...props }, ref) => {
+>(({ children, onError, onOpenChange, ...props }, ref) => {
+  const handleOpenChange: SelectProps['onOpenChange'] = (open) => {
+    try {
+      if (open) {
+        onOpenChange?.(open);
+      }
+    } catch (error) {
+      onError?.(error instanceof Error ? error : new Error('Erro ao abrir o select'));
+    }
+  };
+
   return (
-    <Select
-      ref={ref}
-      onOpenChange={(open) => {
-        try {
-          if (open) {
-            // Tenta abrir o select
-            props.onOpenChange?.(open);
-          }
-        } catch (error) {
-          // Se houver erro, notifica através do callback
-          onError?.(error instanceof Error ? error : new Error('Erro ao abrir o select'));
-        }
-      }}
+    <SelectPrimitive.Root
       {...props}
+      ref={ref}
+      onOpenChange={handleOpenChange}
     >
       {children}
-    </Select>
+    </SelectPrimitive.Root>
   );
 });
 
