@@ -108,10 +108,6 @@ const SelectContent = ({ className, children, position = 'popper', container, ..
             position === 'popper' &&
               'h-[var(--radix-select-trigger-height)] w-full min-w-[var(--radix-select-trigger-width)]'
           )}
-          onTouchStart={(e) => {
-            // Previne comportamento padrão que pode causar problemas em alguns dispositivos Android
-            e.preventDefault();
-          }}
         >
           {children}
         </SelectPrimitive.Viewport>
@@ -120,6 +116,7 @@ const SelectContent = ({ className, children, position = 'popper', container, ..
     </SelectPrimitive.Portal>
   );
 };
+
 
 const SelectLabel = ({ className, ...props }: React.ComponentPropsWithoutRef<typeof SelectPrimitive.Label>) => (
   <SelectPrimitive.Label
