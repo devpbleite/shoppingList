@@ -24,6 +24,7 @@ import { categories } from "@/data/categories";
 import { shoppingItemSchema } from "@/lib/validations/shopping-item";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
+import React from "react";
 
 type FormData = z.infer<typeof shoppingItemSchema>;
 
@@ -33,6 +34,9 @@ interface AddItemFormProps {
 
 export function AddItemForm({ onAdd }: AddItemFormProps) {
   const { toast } = useToast();
+  const [selectError, setSelectError] = React.useState<Error | null>(null);
+  const formRef = React.useRef<HTMLFormElement>(null);
+
   const form = useForm<FormData>({
     resolver: zodResolver(shoppingItemSchema),
     defaultValues: {
@@ -63,9 +67,19 @@ export function AddItemForm({ onAdd }: AddItemFormProps) {
     (cat) => cat.name === form.watch("category")
   );
 
+  React.useEffect(() => {
+    if (selectError) {
+      toast({
+        variant: "destructive",
+        title: "Erro",
+        description: "Houve um problema ao selecionar a categoria. Tente novamente.",
+      });
+    }
+  }, [selectError, toast]);
+
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+      <form ref={formRef} onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
         <div className="grid grid-cols-1 gap-4">
           <FormField
             control={form.control}
@@ -73,8 +87,8 @@ export function AddItemForm({ onAdd }: AddItemFormProps) {
             render={({ field }) => (
               <FormItem>
                 <FormControl>
-                  <Input 
-                    placeholder="Nome do item" 
+                  <Input
+                    placeholder="Nome do item"
                     {...field}
                     className="bg-white/50 md:bg-white border-red-100 focus:border-red-500"
                   />
@@ -117,33 +131,41 @@ export function AddItemForm({ onAdd }: AddItemFormProps) {
                   <Select
                     value={field.value}
                     onValueChange={field.onChange}
+                    onError={(error) => setSelectError(error)}
                   >
                     <FormControl>
-                      <SelectTrigger className="bg-white/50 md:bg-white border-violet-100 focus:border-violet-500">
+                      <SelectTrigger className="bg-white/50 md:bg-white border-red-100 focus:border-red-500">
                         <SelectValue placeholder="Categoria">
                           {selectedCategory && (
-                            <Badge 
-                              category={selectedCategory.name} 
+                            <Badge
+                              category={selectedCategory.name}
                               color={cn(
                                 "bg-opacity-10 text-opacity-90",
                                 selectedCategory.bgColor,
                                 selectedCategory.textColor
-                              )} 
+                              )}
                             />
                           )}
                         </SelectValue>
                       </SelectTrigger>
                     </FormControl>
-                    <SelectContent>
+                    <SelectContent container={formRef.current}>
                       {categories.map((cat) => (
-                        <SelectItem key={cat.name} value={cat.name}>
-                          <Badge 
-                            category={cat.name} 
+                        <SelectItem
+                          key={cat.name}
+                          value={cat.name}
+                          onTouchStart={(e) => {
+                            // Previne comportamento padrão que pode causar problemas em alguns dispositivos Android
+                            e.preventDefault();
+                          }}
+                        >
+                          <Badge
+                            category={cat.name}
                             color={cn(
                               "bg-opacity-10 text-opacity-90",
                               cat.bgColor,
                               cat.textColor
-                            )} 
+                            )}
                           />
                         </SelectItem>
                       ))}
