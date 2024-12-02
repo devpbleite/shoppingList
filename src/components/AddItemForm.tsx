@@ -146,28 +146,13 @@ export function AddItemForm({ onAdd }: AddItemFormProps) {
                       onChange={(newValue) => field.onChange(newValue?.value || "")}
                       options={categoryOptions}
                       placeholder="Categoria"
-                      className="bg-white/50 md:bg-white"
-                      isClearable={true}
-                      classNames={{
-                        control: (state) => 
-                          cn(
-                            "!min-h-9 !bg-transparent border !border-red-100 !rounded-md",
-                            state.isFocused && "!border-red-500 !shadow-none"
-                          ),
-                        placeholder: () => "text-muted-foreground",
-                        input: () => "text-sm",
-                        option: () => "text-sm",
-                      }}
                       styles={{
-                        menu: (base) => ({
-                          ...base,
-                          maxHeight: 'none', 
-                          overflow: 'hidden', 
-                        }),
-                        menuList: (base) => ({
-                          ...base,
-                          maxHeight: 'none', 
-                          overflow: 'hidden', 
+                        control: (baseStyles) => ({
+                          ...baseStyles,
+                          borderColor: "rgb(239 68 68)",
+                          "&:hover": {
+                            borderColor: "rgb(239 68 68)",
+                          },
                         }),
                       }}
                       theme={(theme) => ({
@@ -181,7 +166,17 @@ export function AddItemForm({ onAdd }: AddItemFormProps) {
                         },
                       })}
                       onFocus={(e) => e.preventDefault()}
-                      style={{ PointerEvents: 'none' }}
+                      isClearable={true}
+                      classNames={{
+                        control: (state) => 
+                          cn(
+                            "!min-h-9 !bg-transparent border !border-red-100 !rounded-md",
+                            state.isFocused && "!border-red-500 !shadow-none"
+                          ),
+                        placeholder: () => "text-muted-foreground",
+                        input: () => "text-sm",
+                        option: () => "text-sm",
+                      }}
                     />
                   </FormControl>
                   <FormMessage />
