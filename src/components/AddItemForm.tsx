@@ -2,6 +2,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Plus } from "lucide-react";
 import { z } from "zod";
+import Select from "react-select";
 
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -13,13 +14,6 @@ import {
   FormItem,
   FormMessage,
 } from "@/components/ui/form";
-import {
-  SelectWithError,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { categories } from "@/data/categories";
 import { shoppingItemSchema } from "@/lib/validations/shopping-item";
 import { useToast } from "@/hooks/use-toast";
@@ -32,9 +26,22 @@ interface AddItemFormProps {
   onAdd: (item: FormData) => void;
 }
 
+const categoryOptions = categories.map((cat) => ({
+  value: cat.name,
+  label: (
+    <Badge
+      category={cat.name}
+      color={cn(
+        "bg-opacity-10 text-opacity-90",
+        cat.bgColor,
+        cat.textColor
+      )}
+    />
+  ),
+}));
+
 export function AddItemForm({ onAdd }: AddItemFormProps) {
   const { toast } = useToast();
-  const [selectError, setSelectError] = React.useState<Error | null>(null);
   const formRef = React.useRef<HTMLFormElement>(null);
 
   const form = useForm<FormData>({
@@ -48,12 +55,10 @@ export function AddItemForm({ onAdd }: AddItemFormProps) {
 
   const onSubmit = async (data: FormData) => {
     try {
-      // Validar os dados antes de adicionar
       if (!data.name || !data.quantity || !data.category) {
         throw new Error("Todos os campos são obrigatórios");
       }
 
-      // Prevenir múltiplos submits
       await new Promise(resolve => setTimeout(resolve, 100));
       
       onAdd(data);
@@ -71,20 +76,6 @@ export function AddItemForm({ onAdd }: AddItemFormProps) {
       });
     }
   };
-
-  const selectedCategory = categories.find(
-    (cat) => cat.name === form.watch("category")
-  );
-
-  React.useEffect(() => {
-    if (selectError) {
-      toast({
-        variant: "destructive",
-        title: "Erro",
-        description: "Houve um problema ao selecionar a categoria. Tente novamente.",
-      });
-    }
-  }, [selectError, toast]);
 
   return (
     <Form {...form}>
@@ -143,45 +134,35 @@ export function AddItemForm({ onAdd }: AddItemFormProps) {
               name="category"
               render={({ field }) => (
                 <FormItem>
-                  <SelectWithError
-                    value={field.value}
-                    onValueChange={field.onChange}
-                    onError={(error) => setSelectError(error)}
-                  >
-                    <FormControl>
-                      <SelectTrigger className="bg-white/50 md:bg-white border-red-100 focus:border-red-500">
-                        <SelectValue placeholder="Categoria">
-                          {selectedCategory && (
-                            <Badge
-                              category={selectedCategory.name}
-                              color={cn(
-                                "bg-opacity-10 text-opacity-90",
-                                selectedCategory.bgColor,
-                                selectedCategory.textColor
-                              )}
-                            />
-                          )}
-                        </SelectValue>
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {categories.map((cat) => (
-                        <SelectItem
-                          key={cat.name}
-                          value={cat.name}
-                        >
-                          <Badge
-                            category={cat.name}
-                            color={cn(
-                              "bg-opacity-10 text-opacity-90",
-                              cat.bgColor,
-                              cat.textColor
-                            )}
-                          />
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </SelectWithError>
+                  <FormControl>
+                    <Select
+                      value={categoryOptions.find(option => option.value === field.value)}
+                      onChange={(newValue) => field.onChange(newValue?.value || "")}
+                      options={categoryOptions}
+                      placeholder="Categoria"
+                      className="bg-white/50 md:bg-white"
+                      classNames={{
+                        control: (state) => 
+                          cn(
+                            "!min-h-9 !bg-transparent border !border-red-100 !rounded-md",
+                            state.isFocused && "!border-red-500 !shadow-none"
+                          ),
+                        placeholder: () => "text-muted-foreground",
+                        input: () => "text-sm",
+                        option: () => "text-sm",
+                      }}
+                      theme={(theme) => ({
+                        ...theme,
+                        colors: {
+                          ...theme.colors,
+                          primary: "rgb(239 68 68)", // red-500
+                          primary25: "rgb(254 242 242)", // red-50
+                          primary50: "rgb(254 226 226)", // red-100
+                          primary75: "rgb(252 165 165)", // red-300
+                        },
+                      })}
+                    />
+                  </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
