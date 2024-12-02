@@ -149,15 +149,11 @@ export function AddItemForm({ onAdd }: AddItemFormProps) {
                         </SelectValue>
                       </SelectTrigger>
                     </FormControl>
-                    <SelectContent container={formRef.current || undefined}>
+                    <SelectContent>
                       {categories.map((cat) => (
                         <SelectItem
                           key={cat.name}
                           value={cat.name}
-                          onTouchStart={(e) => {
-                            // Previne comportamento padrão que pode causar problemas em alguns dispositivos Android
-                            e.preventDefault();
-                          }}
                         >
                           <Badge
                             category={cat.name}

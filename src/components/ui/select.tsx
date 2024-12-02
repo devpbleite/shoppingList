@@ -18,10 +18,9 @@ interface SelectProps extends SelectRootProps {
 const SelectWithError = ({ children, onError, onOpenChange, ...props }: SelectProps) => {
   const handleOpenChange: SelectProps['onOpenChange'] = (open) => {
     try {
-      if (open) {
-        onOpenChange?.(open);
-      }
+      onOpenChange?.(open);
     } catch (error) {
+      console.error('Erro ao manipular select:', error);
       onError?.(error instanceof Error ? error : new Error('Erro ao abrir o select'));
     }
   };
