@@ -76,7 +76,7 @@ export function AddItemForm({ onAdd }: AddItemFormProps) {
                   <Input 
                     placeholder="Nome do item" 
                     {...field}
-                    className="bg-white/50 md:bg-white border-violet-100 focus:border-violet-500"
+                    className="bg-white/50 md:bg-white border-red-100 focus:border-red-500"
                   />
                 </FormControl>
                 <FormMessage />
@@ -95,7 +95,7 @@ export function AddItemForm({ onAdd }: AddItemFormProps) {
                       type="number"
                       min="1"
                       placeholder="Quantidade..."
-                      className="bg-white/50 md:bg-white border-violet-100 focus:border-violet-500"
+                      className="bg-white/50 md:bg-white border-red-100 focus:border-red-500"
                       {...field}
                       onChange={(e) => {
                         const value = e.target.value;
