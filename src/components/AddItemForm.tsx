@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/form";
 import {
   Select,
+  SelectWithError,
   SelectContent,
   SelectItem,
   SelectTrigger,
@@ -128,7 +129,7 @@ export function AddItemForm({ onAdd }: AddItemFormProps) {
               name="category"
               render={({ field }) => (
                 <FormItem>
-                  <Select
+                  <SelectWithError
                     value={field.value}
                     onValueChange={field.onChange}
                     onError={(error) => setSelectError(error)}
@@ -149,7 +150,7 @@ export function AddItemForm({ onAdd }: AddItemFormProps) {
                         </SelectValue>
                       </SelectTrigger>
                     </FormControl>
-                    <SelectContent container={formRef.current}>
+                    <SelectContent container={formRef.current || undefined}>
                       {categories.map((cat) => (
                         <SelectItem
                           key={cat.name}
@@ -170,7 +171,7 @@ export function AddItemForm({ onAdd }: AddItemFormProps) {
                         </SelectItem>
                       ))}
                     </SelectContent>
-                  </Select>
+                  </SelectWithError>
                   <FormMessage />
                 </FormItem>
               )}

@@ -9,14 +9,18 @@ import * as SelectPrimitive from '@radix-ui/react-select';
 
 import { cn } from '@/lib/utils';
 
-const Select = React.forwardRef<
+interface SelectProps extends React.ComponentPropsWithoutRef<typeof SelectPrimitive.Root> {
+  onError?: (error: Error) => void;
+}
+
+const Select = SelectPrimitive.Root;
+
+const SelectWithError = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Root>,
-  React.ComponentPropsWithoutRef<typeof SelectPrimitive.Root> & {
-    onError?: (error: Error) => void;
-  }
+  SelectProps
 >(({ children, onError, ...props }, ref) => {
   return (
-    <SelectPrimitive.Root
+    <Select
       ref={ref}
       onOpenChange={(open) => {
         try {
@@ -32,9 +36,11 @@ const Select = React.forwardRef<
       {...props}
     >
       {children}
-    </SelectPrimitive.Root>
+    </Select>
   );
 });
+
+SelectWithError.displayName = 'SelectWithError';
 
 const SelectGroup = SelectPrimitive.Group;
 
@@ -192,6 +198,7 @@ SelectSeparator.displayName = SelectPrimitive.Separator.displayName;
 
 export {
   Select,
+  SelectWithError,
   SelectGroup,
   SelectValue,
   SelectTrigger,
