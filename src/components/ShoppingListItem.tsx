@@ -1,4 +1,3 @@
-import React from 'react';
 import { MoreVertical, Trash2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { ShoppingItem } from "@/types";
