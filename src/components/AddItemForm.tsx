@@ -180,6 +180,8 @@ export function AddItemForm({ onAdd }: AddItemFormProps) {
                           primary75: "rgb(252 165 165)", 
                         },
                       })}
+                      onFocus={(e) => e.preventDefault()}
+                      style={{ PointerEvents: 'none' }}
                     />
                   </FormControl>
                   <FormMessage />
